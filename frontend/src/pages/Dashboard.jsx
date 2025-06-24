@@ -62,6 +62,17 @@ const Dashboard = () => {
     }
   };
 
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`${API_BASE}/tasks/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchTasks();
+    } catch (err) {
+      console.error("Error deleting task:", err.message);
+    }
+  };
+
   const groupedTasks = {
     "To Do": [],
     "In Progress": [],
@@ -114,6 +125,7 @@ const Dashboard = () => {
                       key={task.id}
                       task={task}
                       onUpdate={updateStatus}
+                      onDelete={deleteTask}
                     />
                   ))}
                 </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const TaskCard = ({ task, onUpdate }) => {
+const TaskCard = ({ task, onUpdate, onDelete }) => {
   const getNextStatus = (status) => {
     if (status === "To Do") return "In Progress";
     if (status === "In Progress") return "Done";
@@ -23,6 +23,7 @@ const TaskCard = ({ task, onUpdate }) => {
           {task.status}
         </span>
       </div>
+
       {nextStatus && (
         <button
           className="btn btn-sm btn-outline-primary rounded-3 w-100 fw-medium"
@@ -31,6 +32,13 @@ const TaskCard = ({ task, onUpdate }) => {
           Move to {nextStatus}
         </button>
       )}
+
+      <button
+        className="btn btn-sm btn-outline-danger w-100 mt-2 rounded-3"
+        onClick={() => onDelete(task.id)}
+      >
+        Delete Task
+      </button>
     </div>
   );
 };
