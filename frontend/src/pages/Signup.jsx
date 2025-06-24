@@ -24,7 +24,10 @@ const Signup = () => {
     setMessage("");
 
     try {
-      await axios.post("http://localhost:5000/api/signup", formData);
+      await axios.post(
+        "https://task-manager-backend-i346.onrender.com/api/signup",
+        formData
+      );
       setMessage("Signup successful! Redirecting to login...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
@@ -36,46 +39,51 @@ const Signup = () => {
     <div className="container mt-5" data-aos="fade-up">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <h2 className="text-center mb-4">Sign Up</h2>
-          {message && <div className="alert alert-info">{message}</div>}
-          <form onSubmit={handleSubmit} className="shadow p-4 rounded">
-            <div className="mb-3">
-              <label className="form-label">Name</label>
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="password"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100">
-              Sign Up
-            </button>
-          </form>
-          <p className="text-center mt-3">
-            Already have an account? <a href="/login">Login</a>
-          </p>
+          <div className="card shadow-lg p-4 border-0 rounded-4">
+            <h2 className="text-center mb-4 fw-bold">Create an Account</h2>
+            {message && <div className="alert alert-info">{message}</div>}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label">Name</label>
+                <input
+                  type="text"
+                  className="form-control rounded-3"
+                  name="name"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control rounded-3"
+                  name="email"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  className="form-control rounded-3"
+                  name="password"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary w-100 rounded-3 fw-semibold"
+              >
+                Sign Up
+              </button>
+            </form>
+            <p className="text-center mt-3 mb-0">
+              Already have an account? <a href="/login">Login</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

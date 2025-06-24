@@ -20,7 +20,10 @@ const Login = () => {
     setMessage("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/login", formData);
+      const res = await axios.post(
+        "https://task-manager-backend-i346.onrender.com/api/login",
+        formData
+      );
       localStorage.setItem("token", res.data.token);
       setMessage("Login successful! Redirecting...");
       setTimeout(() => navigate("/dashboard"), 1500);
@@ -33,36 +36,41 @@ const Login = () => {
     <div className="container mt-5" data-aos="fade-up">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <h2 className="text-center mb-4">Login</h2>
-          {message && <div className="alert alert-info">{message}</div>}
-          <form onSubmit={handleSubmit} className="shadow p-4 rounded">
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="password"
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-success w-100">
-              Login
-            </button>
-          </form>
-          <p className="text-center mt-3">
-            Don’t have an account? <a href="/">Sign Up</a>
-          </p>
+          <div className="card shadow-lg p-4 border-0 rounded-4">
+            <h2 className="text-center mb-4 fw-bold">Welcome Back</h2>
+            {message && <div className="alert alert-info">{message}</div>}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control rounded-3"
+                  name="email"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  className="form-control rounded-3"
+                  name="password"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-success w-100 rounded-3 fw-semibold"
+              >
+                Login
+              </button>
+            </form>
+            <p className="text-center mt-3 mb-0">
+              Don’t have an account? <a href="/">Sign Up</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -12,8 +12,8 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const token = localStorage.getItem("token");
+  const API_BASE = "https://task-manager-backend-i346.onrender.com/api";
 
-  // 🔐 Route protection
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -22,10 +22,9 @@ const Dashboard = () => {
     }
   }, []);
 
-  // 📥 Fetch tasks
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks", {
+      const res = await axios.get(`${API_BASE}/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(res.data);
@@ -34,13 +33,12 @@ const Dashboard = () => {
     }
   };
 
-  // ➕ Add task
   const addTask = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
     try {
       await axios.post(
-        "http://localhost:5000/api/tasks",
+        `${API_BASE}/tasks`,
         { title },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -51,11 +49,10 @@ const Dashboard = () => {
     }
   };
 
-  // 🔁 Update status
   const updateStatus = async (id, newStatus) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/tasks/${id}`,
+        `${API_BASE}/tasks/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +62,6 @@ const Dashboard = () => {
     }
   };
 
-  // Group tasks by status
   const groupedTasks = {
     "To Do": [],
     "In Progress": [],
@@ -79,9 +75,9 @@ const Dashboard = () => {
   return (
     <div className="container mt-5" data-aos="fade-up">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0">Task Dashboard</h2>
+        <h2 className="mb-0 fw-bold">Task Dashboard</h2>
         <button
-          className="btn btn-danger"
+          className="btn btn-outline-danger fw-semibold"
           onClick={() => {
             localStorage.removeItem("token");
             navigate("/login");
@@ -95,25 +91,33 @@ const Dashboard = () => {
       <form onSubmit={addTask} className="mb-4 d-flex gap-2">
         <input
           type="text"
-          className="form-control"
+          className="form-control rounded-3"
           placeholder="Enter task title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <button className="btn btn-primary" type="submit">
+        <button className="btn btn-primary rounded-3 fw-semibold" type="submit">
           Add Task
         </button>
       </form>
 
       {/* Task Columns */}
       <div className="row">
-        {["To Do", "In Progress", "Done"].map((status) => (
-          <div className="col-md-4" key={status}>
-            <h4 className="text-center">{status}</h4>
-            <div className="d-flex flex-column gap-2">
-              {groupedTasks[status].map((task) => (
-                <TaskCard key={task.id} task={task} onUpdate={updateStatus} />
-              ))}
+        {Object.keys(groupedTasks).map((status) => (
+          <div className="col-md-4 mb-4" key={status}>
+            <div className="card shadow-sm rounded-4 border-0">
+              <div className="card-body">
+                <h5 className="card-title text-center fw-bold">{status}</h5>
+                <div className="d-flex flex-column gap-3 mt-3">
+                  {groupedTasks[status].map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      onUpdate={updateStatus}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         ))}
