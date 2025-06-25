@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // 🔄 loading state
+  const [loading, setLoading] = useState(false); //  loading state
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,7 +19,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
-    setLoading(true); // ⏳ start loader
+    setLoading(true); //  start loader
 
     try {
       const res = await axios.post(
@@ -33,7 +33,7 @@ const Login = () => {
       setMessage(err.response?.data?.message || "Login failed");
     }
 
-    setLoading(false); // ✅ stop loader
+    setLoading(false);
   };
 
   return (
