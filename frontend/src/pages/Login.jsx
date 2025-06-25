@@ -10,6 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // 🔄 loading state
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,6 +19,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true); // ⏳ start loader
 
     try {
       const res = await axios.post(
@@ -30,6 +32,8 @@ const Login = () => {
     } catch (err) {
       setMessage(err.response?.data?.message || "Login failed");
     }
+
+    setLoading(false); // ✅ stop loader
   };
 
   return (
@@ -60,11 +64,24 @@ const Login = () => {
                   required
                 />
               </div>
+
+              {/* ✅ Login Button with Spinner */}
               <button
                 type="submit"
                 className="btn btn-success w-100 rounded-3 fw-semibold"
+                disabled={loading}
               >
-                Login
+                {loading ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    ></span>
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
             <p className="text-center mt-3 mb-0">

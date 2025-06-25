@@ -14,6 +14,7 @@ const Signup = () => {
     password: "",
   });
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // 🔄 loading state
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,6 +23,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true); // ⏳ start loading
 
     try {
       await axios.post(
@@ -33,6 +35,8 @@ const Signup = () => {
     } catch (err) {
       setMessage(err.response?.data?.message || "Signup failed");
     }
+
+    setLoading(false); // ✅ stop loading
   };
 
   return (
@@ -42,6 +46,7 @@ const Signup = () => {
           <div className="card shadow-lg p-4 border-0 rounded-4">
             <h2 className="text-center mb-4 fw-bold">Create an Account</h2>
             {message && <div className="alert alert-info">{message}</div>}
+
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label">Name</label>
@@ -73,13 +78,27 @@ const Signup = () => {
                   required
                 />
               </div>
+
+              {/* ✅ Button with loader */}
               <button
                 type="submit"
                 className="btn btn-primary w-100 rounded-3 fw-semibold"
+                disabled={loading}
               >
-                Sign Up
+                {loading ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    ></span>
+                    Signing up...
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
               </button>
             </form>
+
             <p className="text-center mt-3 mb-0">
               Already have an account? <a href="/login">Login</a>
             </p>

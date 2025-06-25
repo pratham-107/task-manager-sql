@@ -11,6 +11,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const API_BASE = "https://task-manager-backend-i346.onrender.com/api";
 
@@ -23,6 +24,7 @@ const Dashboard = () => {
   }, []);
 
   const fetchTasks = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${API_BASE}/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -31,6 +33,7 @@ const Dashboard = () => {
     } catch (err) {
       console.error("Error fetching tasks:", err.message);
     }
+    setLoading(false);
   };
 
   const addTask = async (e) => {
@@ -112,28 +115,37 @@ const Dashboard = () => {
         </button>
       </form>
 
-      {/* Task Columns */}
-      <div className="row">
-        {Object.keys(groupedTasks).map((status) => (
-          <div className="col-md-4 mb-4" key={status}>
-            <div className="card shadow-sm rounded-4 border-0">
-              <div className="card-body">
-                <h5 className="card-title text-center fw-bold">{status}</h5>
-                <div className="d-flex flex-column gap-3 mt-3">
-                  {groupedTasks[status].map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onUpdate={updateStatus}
-                      onDelete={deleteTask}
-                    />
-                  ))}
+      {/* Loader or Task Columns */}
+      {loading ? (
+        <div className="text-center mt-5">
+          <div className="spinner-border text-primary" role="status" />
+          <p className="mt-3 fw-semibold">
+            Waking up the server... please wait ⏳
+          </p>
+        </div>
+      ) : (
+        <div className="row">
+          {Object.keys(groupedTasks).map((status) => (
+            <div className="col-md-4 mb-4" key={status}>
+              <div className="card shadow-sm rounded-4 border-0">
+                <div className="card-body">
+                  <h5 className="card-title text-center fw-bold">{status}</h5>
+                  <div className="d-flex flex-column gap-3 mt-3">
+                    {groupedTasks[status].map((task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        onUpdate={updateStatus}
+                        onDelete={deleteTask}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
